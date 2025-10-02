@@ -119,4 +119,8 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .login-form-container{
+    @apply flex items-center justify-center;
+  }
 }

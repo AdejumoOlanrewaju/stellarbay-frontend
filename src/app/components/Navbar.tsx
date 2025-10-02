@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ShoppingCart, Search, Menu, Star, Package, Shield, ArrowRight, Heart, ChevronLeft, ChevronRight, User, Clock, TrendingUp, Award, Truck, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import Link from 'next/link';
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     useEffect(() => {
@@ -19,13 +20,13 @@ const Navbar = () => {
                 <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-20">
                         <div className="flex items-center space-x-12">
-                            <div className="flex items-center group cursor-pointer">
+                            <Link href = "/" className="flex items-center group cursor-pointer logo">
                                 <div className="relative">
                                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg blur-sm opacity-40"></div>
                                     <Package className="h-8 w-8 text-black relative" strokeWidth={2.5} />
                                 </div>
                                 <span className="ml-3 text-xl font-bold tracking-tight text-black">StellarBay</span>
-                            </div>
+                            </Link>
                             <div className="hidden lg:flex space-x-8">
                                 <a href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors tracking-wide">NEW IN</a>
                                 <a href="#" className="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors tracking-wide">COLLECTIONS</a>

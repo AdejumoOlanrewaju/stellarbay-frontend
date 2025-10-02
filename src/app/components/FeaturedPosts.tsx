@@ -87,8 +87,8 @@ const FeaturedPosts = () => {
     ];
     return (
         <div className='featured-prd-section w-full'>
-            <div className="bg-gradient-to-b from-gray-50 to-white py-10">
-                <div className="max-w-7xl mx-auto px-4">
+            <div className="bg-gradient-to-b from-gray-50 to-white py-20">
+                <div className="max-w-[1440px] mx-auto px-4">
                     <div className="flex justify-between items-end mb-16">
                         <div>
                             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">Featured Products</h2>

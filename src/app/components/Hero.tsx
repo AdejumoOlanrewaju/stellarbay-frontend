@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Award, ChevronLeft, ChevronRight } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const Hero = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -25,6 +25,7 @@ const Hero = () => {
             image: "https://images.unsplash.com/photo-1556912173-46c336c7fd55?w=1920&h=1080&fit=crop"
         }
     ];
+    const heroSlidesLength = heroSlides.length
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     };
@@ -32,6 +33,11 @@ const Hero = () => {
     const prevSlide = () => {
         setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
     };
+
+    useEffect(() => {
+        const intervalVar = setInterval(nextSlide, 3000)
+        return () => clearInterval(intervalVar)
+    }, [heroSlidesLength])
     return (
         <div className='w-full hero-container'>
             {/* Hero Carousel */}
