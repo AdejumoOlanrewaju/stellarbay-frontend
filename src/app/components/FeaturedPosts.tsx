@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Heart, ShoppingCart, Star } from 'lucide-react';
+import AddToCartBtn from './AddToCartBtn';
 const FeaturedPosts = () => {
     const featuredProducts = [
         {
@@ -85,6 +86,7 @@ const FeaturedPosts = () => {
             badge: "Featured"
         }
     ];
+
     return (
         <div className='featured-prd-section w-full'>
             <div className="bg-gradient-to-b from-gray-50 to-white py-20">
@@ -119,12 +121,7 @@ const FeaturedPosts = () => {
                                         >
                                             <Heart className="h-4 w-4" strokeWidth={2} />
                                         </Button>
-                                        <div className="absolute inset-x-4 bottom-4 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
-                                            <Button className="w-full bg-white text-black hover:bg-gray-100 font-semibold rounded-full shadow-xl">
-                                                <ShoppingCart className="h-4 w-4 mr-2" />
-                                                Add to Cart
-                                            </Button>
-                                        </div>
+                                        <AddToCartBtn product={product}/>
                                     </div>
                                     <div className="p-5 pb-8">
                                         <h3 className="font-semibold text-gray-900 mb-2 text-base group-hover:text-blue-600 transition-colors line-clamp-1">

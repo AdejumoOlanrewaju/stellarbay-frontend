@@ -1,16 +1,52 @@
 "use client"
 import React, { FormEvent, useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, Link, Package } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Package, User } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+    const [form, setForm] = useState({ username: "", email: "", password: "" })
+    const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState("")
+    const router = useRouter()
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('Login attempted with:', { email, password, rememberMe });
-    };
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.name)
+        setForm({ ...form, [e.target.name]: e.target.value })
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
+        setMessage("")
+
+        try {
+            const res = await fetch("https://stellarbayapi.onrender.com/api/auth/signup/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form),
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                setMessage(data.error || "Signup failed")
+            } else {
+                setMessage("Signup successful! You can now log in.")
+                setTimeout(() => {
+                    router.push("/login")
+                }, 1500)
+            }
+        } catch (err) {
+            console.error(err)
+            setMessage("Something went wrong. Please try again.")
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <div className='login-page'>
             <div className="flex flex-col-reverse lg:flex-row lg:h-[calc(100vh-80px)]">
@@ -20,7 +56,7 @@ const Login = () => {
 
                 <div className='login-form-container lg:w-[60%]'>
                     <div className="bg-white rounded-2xl p-8 max-w-[750px] w-[90%]">
-                       
+
                         <div className="text-center mb-8">
                             <div className="flex items-center group cursor-pointer logo justify-center mb-5">
                                 <div className="relative">
@@ -33,7 +69,27 @@ const Login = () => {
                         </div>
 
                         {/* Form */}
-                        <form onSubmit={(e) => handleSubmit(e)} className="space-y-5">
+                        <form className="space-y-5">
+                            {/* Email Field */}
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                                    Username
+                                </label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                                    <input
+                                        id="username"
+                                        type="text"
+                                        name="username"
+                                        value={form.username}
+                                        onChange={handleChange}
+                                        placeholder="John Doe"
+                                        className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
                             {/* Email Field */}
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
@@ -44,8 +100,9 @@ const Login = () => {
                                     <input
                                         id="email"
                                         type="email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        name="email"
+                                        value={form.email}
+                                        onChange={handleChange}
                                         placeholder="you@example.com"
                                         className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition"
                                         required
@@ -63,8 +120,9 @@ const Login = () => {
                                     <input
                                         id="password"
                                         type={showPassword ? 'text' : 'password'}
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        name='password'
+                                        value={form.password}
+                                        onChange={handleChange}
                                         placeholder="••••••••"
                                         className="w-full pl-11 pr-12 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition"
                                         required
@@ -97,10 +155,12 @@ const Login = () => {
 
                             {/* Submit Button */}
                             <button
-                                type="submit"
+                                disabled={loading}
+                                type="button"
                                 className="w-full bg-slate-900 text-white py-3 rounded-lg font-medium hover:bg-slate-800 transition transform hover:scale-[1.02] active:scale-[0.98]"
+                                onClick={handleSubmit}
                             >
-                                Sign in
+                                {loading ? "Signing up..." : "Sign up"}
                             </button>
                         </form>
 
@@ -141,11 +201,13 @@ const Login = () => {
 
                         {/* Sign Up Link */}
                         <p className="text-center text-sm text-slate-600 mt-6">
-                            Don't have an account?{' '}
-                            <a href="#" className="font-medium text-slate-900 hover:text-slate-700 transition">
-                                Sign up
-                            </a>
+                            Already have an account?{' '}
+                            <Link href="/login" className="font-medium text-slate-900 hover:text-slate-700 transition">
+                                Sign In
+                            </Link>
                         </p>
+
+                        {message && <p className="mt-4 text-center">{message}</p>}
                     </div>
                 </div>
 

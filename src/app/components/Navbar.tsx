@@ -4,8 +4,10 @@ import { ShoppingCart, Search, Menu, Star, Package, Shield, ArrowRight, Heart, C
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
+import { useCart } from '../contexts/CartContext';
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
+    const { cartCount } = useCart()
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
@@ -20,7 +22,7 @@ const Navbar = () => {
                 <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-20">
                         <div className="flex items-center space-x-12">
-                            <Link href = "/" className="flex items-center group cursor-pointer logo">
+                            <Link href="/" className="flex items-center group cursor-pointer logo">
                                 <div className="relative">
                                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg blur-sm opacity-40"></div>
                                     <Package className="h-8 w-8 text-black relative" strokeWidth={2.5} />
@@ -50,10 +52,14 @@ const Navbar = () => {
                             <Button variant="ghost" size="icon" className="hover:bg-gray-50">
                                 <Heart className="h-5 w-5 text-gray-900" strokeWidth={2} />
                             </Button>
-                            <Button variant="ghost" size="icon" className="relative hover:bg-gray-50">
-                                <ShoppingCart className="h-5 w-5 text-gray-900" strokeWidth={2} />
-                                <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">3</span>
-                            </Button>
+                            <Link href={"/cart"}>
+                                <Button variant="ghost" size="icon" className="relative hover:bg-gray-50">
+                                    <ShoppingCart className="h-5 w-5 text-gray-900" strokeWidth={2} />
+                                    {
+                                        <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">{cartCount ? cartCount : "0"}</span>
+                                    }
+                                </Button>
+                            </Link>
                             <Button variant="ghost" size="icon" className="lg:hidden">
                                 <Menu className="h-5 w-5 text-gray-900" />
                             </Button>

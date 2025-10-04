@@ -1,28 +1,33 @@
 import { Award, Package, TrendingUp } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react'
 
 const FeaturedCategory = () => {
     const categories = [
         {
             name: "Electronics",
+            slug: "electronics",
             count: "2,847 items",
             image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=600&h=600&fit=crop",
             icon: TrendingUp
         },
         {
             name: "Fashion",
+            slug: "fashion",
             count: "5,234 items",
             image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&h=600&fit=crop",
             icon: Award
         },
         {
             name: "Home & Living",
+            slug: "homeliving",
             count: "3,156 items",
             image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&h=600&fit=crop",
             icon: Package
         },
         {
             name: "Sports & Outdoor",
+            slug: "sports&outdoor",
             count: "4,092 items",
             image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&h=600&fit=crop",
             icon: TrendingUp
@@ -37,9 +42,10 @@ const FeaturedCategory = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {categories.map((category, index) => {
+                        const slug = category.slug?.toLowerCase().replace(/\s+/g, "-");
                         const IconComponent = category.icon;
                         return (
-                            <div key={index} className="group cursor-pointer">
+                            <Link href = {`/category/${slug}`} key={index} className="group cursor-pointer">
                                 <div className="relative overflow-hidden rounded-2xl aspect-square mb-4 shadow-lg hover:shadow-2xl transition-all">
                                     <img
                                         src={category.image}
@@ -53,7 +59,7 @@ const FeaturedCategory = () => {
                                         <p className="text-sm text-white/80">{category.count}</p>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>

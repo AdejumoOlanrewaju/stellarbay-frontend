@@ -6,7 +6,7 @@ const Footer = () => {
         <>
             {/* Footer */}
             <footer className="bg-gray-50 border-t border-gray-200" >
-                <div className="max-w-7xl mx-auto px-4 py-20">
+                <div className="max-w-[1440px] mx-auto px-4 py-20">
                     <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-16">
                         <div className="md:col-span-2">
                             <div className="flex items-center mb-6 group cursor-pointer">
