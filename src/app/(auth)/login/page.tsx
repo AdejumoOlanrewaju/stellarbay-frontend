@@ -4,6 +4,7 @@ import { Eye, EyeOff, Mail, Lock, Package, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import BASE_API_URL from '@/lib/appConfig';
+import { useAuth } from '@/app/hooks/useAuth';
 const Login = () => {
     const router = useRouter()
 
@@ -12,6 +13,7 @@ const Login = () => {
     const [form, setForm] = useState({ username : "", email: "", password: "" })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
+    const { login } = useAuth()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -33,14 +35,15 @@ const Login = () => {
             })
 
             const data = await res.json()
-
+            console.log(data)
             if (!res.ok) {
                 setMessage(data.error || "Signup failed")
             } else {
                 setMessage("Login successful! Welcome to StellarBay.")
-                // setTimeout(() => {
-                //     router.push("/")
-                // }, 1500)
+                login(data)
+                setTimeout(() => {
+                    router.push("/")
+                }, 1500)
             }
         } catch (err) {
             console.error(err)
