@@ -2,12 +2,21 @@
 import React, { useEffect, useState } from 'react'
 import { ShoppingCart, Search, Menu, Star, Package, Shield, ArrowRight, Heart, ChevronLeft, ChevronRight, User, Clock, TrendingUp, Award, Truck, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../hooks/useAuth';
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const { cartCount } = useCart()
+    const { isAuthenticated, user, logout } = useAuth()
+
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
@@ -18,8 +27,8 @@ const Navbar = () => {
     return (
         <>
             {/* Navigation */}
-            <nav className={`bg-white sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
-                <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+            <nav className={`bg-white z-[999] sticky top-0  transition-all duration-300 ${scrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
+                <div className="max-w-[1440px] mx-auto px-4  lg:px-0">
                     <div className="flex justify-between items-center h-20">
                         <div className="flex items-center space-x-12">
                             <Link href="/" className="flex items-center group cursor-pointer logo">
@@ -46,20 +55,48 @@ const Navbar = () => {
                                     className="bg-transparent border-none outline-none ml-3 w-full text-sm placeholder:text-gray-400"
                                 />
                             </div>
-                            <Button variant="ghost" size="icon" className="hover:bg-gray-50">
-                                <User className="h-5 w-5 text-gray-900" strokeWidth={2} />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="hover:bg-gray-50">
-                                <Heart className="h-5 w-5 text-gray-900" strokeWidth={2} />
-                            </Button>
-                            <Link href={"/cart"}>
-                                <Button variant="ghost" size="icon" className="relative hover:bg-gray-50">
-                                    <ShoppingCart className="h-5 w-5 text-gray-900" strokeWidth={2} />
-                                    {
-                                        <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">{cartCount ? cartCount : "0"}</span>
-                                    }
-                                </Button>
-                            </Link>
+                            {
+                                isAuthenticated ? (
+                                    <div>
+                                        {/* <Button variant="ghost" size="icon" className="hover:bg-gray-50">
+                                            <User className="h-5 w-5 text-gray-900" strokeWidth={2} />
+                                        </Button> */}
+                                        {/* <Button variant="ghost" size="icon" className="hover:bg-gray-50">
+                                            <Heart className="h-5 w-5 text-gray-900" strokeWidth={2} />
+                                        </Button> */}
+                                        <Link href={"/"}>
+                                            <Button variant="ghost" size="icon" className="relative hover:bg-gray-50">
+                                                <ShoppingCart className="h-5 w-5 text-gray-900" strokeWidth={2} />
+                                                {
+                                                    <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">{cartCount ? cartCount : "0"}</span>
+                                                }
+                                            </Button>
+                                        </Link>
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-sm">Hi, {user?.username || "User"}</span>
+                                            <button
+                                                onClick={logout}
+                                                className="bg-red-500 px-3 py-1 rounded-md hover:bg-red-600"
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                        {/* <Button variant="ghost" className="relative hover:bg-gray-50">
+                                            Logout
+                                        </Button> */}
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <Link href={"/login"}>
+                                            <Button className='cursor-pointer'>
+                                                Login
+                                            </Button>
+
+                                        </Link>
+                                    </div>
+                                )
+                            }
+
                             <Button variant="ghost" size="icon" className="lg:hidden">
                                 <Menu className="h-5 w-5 text-gray-900" />
                             </Button>

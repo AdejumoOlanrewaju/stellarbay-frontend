@@ -59,7 +59,7 @@ const Footer = () => {
                     </div>
                     <div className="border-t border-gray-200 pt-8">
                         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                            <p className="text-gray-600 text-sm">&copy; 2024 LUMINA. All rights reserved. Crafted with excellence.</p>
+                            <p className="text-gray-600 text-sm">&copy; 2025 StellarBay. All rights reserved. Crafted with excellence.</p>
                             <div className="flex items-center space-x-6">
                                 <div className="flex items-center space-x-2">
                                     <Shield className="h-5 w-5 text-green-600" strokeWidth={2} />

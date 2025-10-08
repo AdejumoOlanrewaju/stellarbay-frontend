@@ -1,15 +1,15 @@
 "use client"
 import React, { FormEvent, useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, Package } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Package, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
+import BASE_API_URL from '@/lib/appConfig';
 const Login = () => {
     const router = useRouter()
 
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const [form, setForm] = useState({ email: "", password: "" })
+    const [form, setForm] = useState({ username : "", email: "", password: "" })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
 
@@ -24,7 +24,7 @@ const Login = () => {
         console.log(form)
 
         try {
-            const res = await fetch("https://stellarbayapi.onrender.com/api/auth/login/", {
+            const res = await fetch(`${BASE_API_URL}/api/auth/login/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -37,10 +37,10 @@ const Login = () => {
             if (!res.ok) {
                 setMessage(data.error || "Signup failed")
             } else {
-                setMessage("Signup successful! You can now log in.")
-                setTimeout(() => {
-                    router.push("/")
-                }, 1500)
+                setMessage("Login successful! Welcome to StellarBay.")
+                // setTimeout(() => {
+                //     router.push("/")
+                // }, 1500)
             }
         } catch (err) {
             console.error(err)
@@ -72,7 +72,27 @@ const Login = () => {
 
                         {/* Form */}
                         <form onSubmit={(e) => handleSubmit(e)} className="space-y-5">
-                            {/* Email Field */}
+                            {/* Username Field */}
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                                    Username
+                                </label>
+                                <div className="relative">
+                                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                                    <input
+                                        id="username"
+                                        type="text"
+                                        name = "username"
+                                        value={form.username}
+                                        onChange={handleChange}
+                                        placeholder="John Doe"
+                                        className="w-full pl-11 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                              {/* Email Field */}
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                                     Email address

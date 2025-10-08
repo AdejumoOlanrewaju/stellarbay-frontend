@@ -3,16 +3,17 @@ import React, { FormEvent, useState } from 'react'
 import { Eye, EyeOff, Mail, Lock, Package, User } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import BASE_API_URL from '@/lib/appConfig';
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [showPassword2, setShowPassword2] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const [form, setForm] = useState({ username: "", email: "", password: "" })
+    const [form, setForm] = useState({ username: "", email: "", password: "", password2 : "" })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
     const router = useRouter()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.name)
         setForm({ ...form, [e.target.name]: e.target.value })
     }
 
@@ -20,9 +21,10 @@ const Login = () => {
         e.preventDefault()
         setLoading(true)
         setMessage("")
+        console.log(form)
 
         try {
-            const res = await fetch("https://stellarbayapi.onrender.com/api/auth/signup/", {
+            const res = await fetch(`${BASE_API_URL}/api/auth/signup/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -31,9 +33,11 @@ const Login = () => {
             })
 
             const data = await res.json()
-
+            console.log(data)
             if (!res.ok) {
                 setMessage(data.error || "Signup failed")
+                const text = await res.text();
+                throw new Error(`Server error: ${text}`);
             } else {
                 setMessage("Signup successful! You can now log in.")
                 setTimeout(() => {
@@ -49,7 +53,7 @@ const Login = () => {
     }
     return (
         <div className='login-page'>
-            <div className="flex flex-col-reverse lg:flex-row lg:h-[calc(100vh-80px)]">
+            <div className="flex flex-col-reverse lg:flex-row lg:min-h-[calc(100vh-80px)]">
                 <div className='hidden lg:block w-[40%]'>
                     <img className='w-full block object-cover h-[400px] md:h-full' src="https://images.unsplash.com/photo-1621972660772-6a0427d5e102?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fHdlbGwlMjBkcmVzc2VkJTIwcGVyc29ufGVufDB8fDB8fHww" alt="" />
                 </div>
@@ -133,6 +137,33 @@ const Login = () => {
                                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
                                     >
                                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Confirm Password Field */}
+                            <div>
+                                <label htmlFor="password2" className="block text-sm font-medium text-slate-700 mb-2">
+                                    Confirm Password
+                                </label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                                    <input
+                                        id="password2"
+                                        type={showPassword2 ? 'text' : 'password'}
+                                        name='password2'
+                                        value={form.password2}
+                                        onChange={handleChange}
+                                        placeholder="••••••••"
+                                        className="w-full pl-11 pr-12 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:border-transparent outline-none transition"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword2(!showPassword2)}
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition"
+                                    >
+                                        {showPassword2 ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                     </button>
                                 </div>
                             </div>
