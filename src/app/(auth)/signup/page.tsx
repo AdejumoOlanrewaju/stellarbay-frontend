@@ -8,7 +8,7 @@ const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showPassword2, setShowPassword2] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const [form, setForm] = useState({ username: "", email: "", password: "", password2 : "" })
+    const [form, setForm] = useState({ username: "", email: "", password: "", password2: "" })
     const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
     const router = useRouter()
@@ -32,14 +32,16 @@ const Login = () => {
                 body: JSON.stringify(form),
             })
 
-            const data = await res.json()
-            console.log(data)
+            const {email, message, error, username} = await res.json()
+            
             if (!res.ok) {
-                setMessage(data.error || "Signup failed")
+                setMessage(error || "Signup failed")
                 const text = await res.text();
                 throw new Error(`Server error: ${text}`);
             } else {
+                console.log(message)
                 setMessage("Signup successful! You can now log in.")
+                createProfile({email, username})
                 setTimeout(() => {
                     router.push("/login")
                 }, 1500)
@@ -50,6 +52,32 @@ const Login = () => {
         } finally {
             setLoading(false)
         }
+    }
+
+    const createProfile = async (userData: any) => {
+        try {
+            const res = await fetch(`${BASE_API_URL}/api/profiles/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+            })
+
+            const data = await res.json()
+            console.log(data)
+            if (!res.ok) {
+                console.log(data.error || "Profile creation failed")
+                const text = await res.text();
+                throw new Error(`Server error: ${text}`);
+            } else {
+                console.log("Profile Created successful! You can now log in.")
+              
+            }
+        } catch (err) {
+            console.error(err)
+            console.log("Something went wrong. Please try again.")
+        } 
     }
     return (
         <div className='login-page'>
