@@ -21,7 +21,6 @@ const Login = () => {
         e.preventDefault()
         setLoading(true)
         setMessage("")
-        console.log(form)
 
         try {
             const res = await fetch(`${BASE_API_URL}/api/auth/signup/`, {
@@ -41,10 +40,10 @@ const Login = () => {
             } else {
                 console.log(message)
                 setMessage("Signup successful! You can now log in.")
-                createProfile({email, username})
-                setTimeout(() => {
-                    router.push("/login")
-                }, 1500)
+                await createProfile({email, username})
+                // setTimeout(() => {
+                //     router.push("/login")
+                // }, 1500)
             }
         } catch (err) {
             console.error(err)
